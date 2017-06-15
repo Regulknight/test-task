@@ -15,6 +15,7 @@ public class MainUI extends UI {
         layout.setMargin(true);
 
         layout.addComponent(new Label("Main UI"));
+        layout.addComponent(new FormLayout());
 
         setContent(layout);
     }
