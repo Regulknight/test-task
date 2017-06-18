@@ -1,18 +1,18 @@
 package com.haulmont.testtask.model;
 
 public class Author {
-    Long id;
-    String name;
-    String fname;
-    String patronymic;
+    private Long id;
+    private String fname;
+    private String lname;
+    private String patronymic;
 
     public Author() {
     }
 
     public Author(Long id, String name, String fname, String patronymic) {
         this.id = id;
-        this.name = name;
-        this.fname = fname;
+        this.fname = name;
+        this.lname = fname;
         this.patronymic = patronymic;
     }
 
@@ -24,20 +24,20 @@ public class Author {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getFname() {
         return fname;
     }
 
     public void setFname(String fname) {
         this.fname = fname;
+    }
+
+    public String getLname() {
+        return lname;
+    }
+
+    public void setLname(String lname) {
+        this.lname = lname;
     }
 
     public String getPatronymic() {
@@ -56,17 +56,17 @@ public class Author {
         Author author = (Author) o;
 
         if (!getId().equals(author.getId())) return false;
-        if (!getName().equals(author.getName())) return false;
         if (!getFname().equals(author.getFname())) return false;
-        return getPatronymic().equals(author.getPatronymic());
+        if (!getLname().equals(author.getLname())) return false;
+        return getPatronymic() != null ? getPatronymic().equals(author.getPatronymic()) : author.getPatronymic() == null;
     }
 
     @Override
     public int hashCode() {
         int result = getId().hashCode();
-        result = 31 * result + getName().hashCode();
         result = 31 * result + getFname().hashCode();
-        result = 31 * result + getPatronymic().hashCode();
+        result = 31 * result + getLname().hashCode();
+        result = 31 * result + (getPatronymic() != null ? getPatronymic().hashCode() : 0);
         return result;
     }
 
@@ -74,8 +74,8 @@ public class Author {
     public String toString() {
         return "Author{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", fname='" + fname + '\'' +
+                ", lname='" + lname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 '}';
     }

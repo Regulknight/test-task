@@ -1,5 +1,6 @@
 package com.haulmont.testtask.model;
 
+import java.sql.Date;
 import java.time.Year;
 
 public class Book {
@@ -8,13 +9,13 @@ public class Book {
     Author author;
     Genre genre;
     String publisher;
-    Year year;
+    Date year;
     String city;
 
     public Book() {
     }
 
-    public Book(Long id, String name, Author author, Genre genre, String publisher, Year year, String city) {
+    public Book(Long id, String name, Author author, Genre genre, String publisher, Date year, String city) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -64,11 +65,11 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Year getYear() {
+    public Date getYear() {
         return year;
     }
 
-    public void setYear(Year year) {
+    public void setYear(Date year) {
         this.year = year;
     }
 

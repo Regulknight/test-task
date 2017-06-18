@@ -6,34 +6,31 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by zelh on 18.06.17.
- */
 public class GenreService {
-    private GenreService instance;
+    private static GenreService instance;
     private PreparedStatement statement;
     private Connection connection;
 
-    public GenreService getInstance(){
+    public static GenreService getInstance(){
         if (instance == null){
             instance = new GenreService();
         }
         return instance;
     }
 
-    GenreService(){
+    private GenreService(){
         connection = DBConnector.getInstance();
     }
 
-    public void add(String name) throws SQLException {
-        String query = "INSERT INTO TABLE GENRE(NAME) VALUES(?)";
+    public void add(Genre genre) throws SQLException {
+        String query = "INSERT INTO TABLE PUBLIC.GENRE(NAME) VALUES(?)";
         statement = connection.prepareStatement(query);
-        statement.setString(1, name);
+        statement.setString(1, genre.getName());
         statement.executeQuery();
     }
 
     public Genre get(long id) throws SQLException {
-        String query = "SELECT * FROM GENRE WHERE ID = ?";
+        String query = "SELECT * FROM PUBLIC.GENRE WHERE ID = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1, String.valueOf(id));
         ResultSet rs = statement.executeQuery();
@@ -46,23 +43,23 @@ public class GenreService {
             return null;
     }
 
-    public void set(long id, String name) throws SQLException {
-        String query = "UPDATE GENRE SET NAME = ? WHERE ID = ?";
+    public void set(Genre genre) throws SQLException {
+        String query = "UPDATE PUBLIC.GENRE SET NAME = ? WHERE ID = ?";
         statement = connection.prepareStatement(query);
-        statement.setString(1, name);
-        statement.setString(2, String.valueOf(id));
+        statement.setString(1, genre.getName());
+        statement.setString(2, String.valueOf(genre.getName()));
         statement.executeQuery();
     }
 
     public void delete(long id) throws SQLException {
-        String query = "DELETE FROM GENRE WHERE ID = ?";
+        String query = "DELETE FROM PUBLIC.GENRE WHERE ID = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1, String.valueOf(id));
         statement.executeQuery();
     }
 
     public List<Genre> getAll() throws SQLException {
-        String query = "SELECT * FROM GENRE";
+        String query = "SELECT * FROM PUBLIC.GENRE";
         statement = connection.prepareStatement(query);
         ResultSet rs = statement.executeQuery();
         List<Genre> result = new ArrayList();

@@ -5,11 +5,12 @@ import java.sql.*;
 /**
  * Created by zelh on 18.06.17.
  */
-public class DBConnector {private static volatile DBConnector dbConnector;
+public class DBConnector {
+    private static DBConnector dbConnector;
     private Connection c;
     private Statement st;
 
-    static Connection getInstance(){
+    public static Connection getInstance(){
         if (dbConnector == null){
             dbConnector = new DBConnector();
         }
@@ -47,7 +48,7 @@ public class DBConnector {private static volatile DBConnector dbConnector;
                 "'SAMARA', 0, 0, 'MOSCOW')");
     }
 
-    public DBConnector(){
+    private DBConnector(){
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
             c = DriverManager.getConnection("jdbc:hsqldb:file:testdb", "SA", "");
