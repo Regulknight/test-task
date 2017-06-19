@@ -35,7 +35,7 @@ public class AuthorService {
     }
 
     public Author get(long id) throws SQLException {
-        String query = "SELECT * FROM PUBLIC.GENRE WHERE ID = ?";
+        String query = "SELECT * FROM PUBLIC.AUTHOR WHERE ID = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1, String.valueOf(id));
         ResultSet rs = statement.executeQuery();
