@@ -54,7 +54,7 @@ public class DBConnector {
             c = DriverManager.getConnection("jdbc:hsqldb:file:testdb", "SA", "");
             st = c.createStatement();
             initDB();
-            fillDB();
+            //fillDB();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

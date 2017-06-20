@@ -71,12 +71,7 @@ public class Author {
     }
 
     @Override
-    public String toString() {
-        return "Author{" +
-                "id=" + id +
-                ", fname='" + fname + '\'' +
-                ", lname='" + lname + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                '}';
+    public String   toString() {
+        return fname + " " + lname + " " + patronymic;
     }
 }
