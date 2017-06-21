@@ -46,11 +46,11 @@ public class Controller {
         ui.updateBooksLayout();
     }
 
-    public void deleteBook(long id){
+    public void deleteBook(long id) throws DeleteException {
         try {
             bookService.delete(id);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DeleteException();
         }
         ui.updateBooksLayout();
     }
@@ -82,11 +82,11 @@ public class Controller {
         ui.updateGenresLayout();
     }
 
-    public void deleteGenre(long id){
+    public void deleteGenre(long id) throws DeleteException {
         try {
             genreService.delete(id);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DeleteException();
         }
         ui.updateGenresLayout();
     }
@@ -118,11 +118,11 @@ public class Controller {
         ui.updateAuthorsLayout();
     }
 
-    public void deleteAuthor(long id){
+    public void deleteAuthor(long id) throws DeleteException {
         try {
             authorService.delete(id);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DeleteException();
         }
         ui.updateAuthorsLayout();
     }
@@ -135,4 +135,6 @@ public class Controller {
         }
         return null;
     }
+
 }
+

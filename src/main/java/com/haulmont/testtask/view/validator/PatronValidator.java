@@ -3,20 +3,16 @@ package com.haulmont.testtask.view.validator;
 import com.vaadin.data.validator.AbstractStringValidator;
 
 /**
- * Created by zelh on 21.06.17.
+ * Created by zelh on 22.06.17.
  */
-public class StringValidator extends AbstractStringValidator {
-
-    public StringValidator(String errorMessage) {
+public class PatronValidator extends AbstractStringValidator {
+    public PatronValidator(String errorMessage) {
         super(errorMessage);
     }
 
     @Override
     protected boolean isValidValue(String s) {
-        if (s == null)
-            return false;
-        s.trim();
-        if (s.matches("[a-zA-Z-а-яА-ЯёЁ]+"))
+        if (s.matches("[a-zA-Z-а-яА-ЯёЁ]*"))
             return true;
         return false;
     }

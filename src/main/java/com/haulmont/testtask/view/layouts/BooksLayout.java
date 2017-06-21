@@ -1,11 +1,14 @@
 package com.haulmont.testtask.view.layouts;
 
 import com.haulmont.testtask.controller.Controller;
+import com.haulmont.testtask.controller.DeleteException;
 import com.haulmont.testtask.model.Book;
 import com.haulmont.testtask.view.MainUI;
 import com.haulmont.testtask.view.subs.SubBookUI;
 import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -14,10 +17,11 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public class BooksLayout {
     private final Controller controller;
-    private Grid booksGrid = new Grid();
+    private Grid booksGrid;
 
     public BooksLayout(Controller controller) {
         this.controller = controller;
+        booksGrid = new Grid("Cписок книг");
     }
 
     public Layout getLayout(){
@@ -30,6 +34,51 @@ public class BooksLayout {
         booksGrid.setSizeFull();
         booksGrid.setWidth("95%");
         booksGrid.setColumnOrder("id", "name", "year", "city", "author", "genre", "publisher");
+
+        HorizontalLayout filters = new HorizontalLayout();
+        filters.setMargin(true);
+        filters.setSpacing(true);
+
+
+        TextField nameFilter = new TextField("Название");
+        TextField authorFilter = new TextField("Автор");
+        TextField publisherFilter = new TextField("Издатель");
+
+
+        nameFilter.addTextChangeListener(textChangeEvent -> {
+            container.removeContainerFilters("name");
+            if (!textChangeEvent.getText().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("name", textChangeEvent.getText(),
+                    true, false));
+        });
+
+        authorFilter.addTextChangeListener(textChangeEvent -> {
+            container.removeContainerFilters("author");
+            if (!textChangeEvent.getText().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("author", textChangeEvent.getText(),
+                        true, false));
+
+        });
+
+        publisherFilter.addTextChangeListener(textChangeEvent -> {
+            container.removeContainerFilters("publisher");
+            if (!textChangeEvent.getText().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("publisher", textChangeEvent.getText(),
+                        true, false));
+        });
+
+        filters.addComponent(nameFilter);
+        filters.addComponent(authorFilter);
+        filters.addComponent(publisherFilter);
+
+        Panel panel = new Panel("Фильтр");
+        filters.setSizeUndefined();
+
+        panel.setContent(filters);
+        panel.setWidth("95%");
+
+        layout.addComponent(panel);
+        layout.setComponentAlignment(panel, Alignment.TOP_CENTER);
 
         layout.addComponent(booksGrid);
         layout.setComponentAlignment(booksGrid, Alignment.TOP_CENTER);
@@ -51,7 +100,15 @@ public class BooksLayout {
         Button deleteButton = new Button("Удалить");
         deleteButton.addStyleName(ValoTheme.BUTTON_DANGER);
         deleteButton.addClickListener(clickEvent -> {
-            controller.deleteBook(((Book) booksGrid.getSelectedRow()).getId());
+            if (booksGrid.getSelectedRow() != null)
+                try {
+                    controller.deleteBook(((Book) booksGrid.getSelectedRow()).getId());
+                } catch (DeleteException e) {
+                    new Notification("Невозможно удалить книгу", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                }
+            else{
+                new Notification("Выберите книгу для удаления").show(Page.getCurrent());
+            }
         });
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();

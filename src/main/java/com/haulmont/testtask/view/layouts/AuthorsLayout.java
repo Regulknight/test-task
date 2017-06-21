@@ -1,25 +1,26 @@
 package com.haulmont.testtask.view.layouts;
 
 import com.haulmont.testtask.controller.Controller;
+import com.haulmont.testtask.controller.DeleteException;
 import com.haulmont.testtask.model.Author;
-import com.haulmont.testtask.model.Book;
 import com.haulmont.testtask.view.MainUI;
 import com.haulmont.testtask.view.subs.SubAuthorUI;
-import com.haulmont.testtask.view.subs.SubBookUI;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * Created by zelh on 21.06.17.
  */
+
 public class AuthorsLayout {
     private final Controller controller;
     private Grid authorsGrid;
 
     public AuthorsLayout(Controller controller) {
         this.controller = controller;
-        authorsGrid = new Grid();
+        authorsGrid = new Grid("Список авторов");
     }
 
     public Layout getLayout(){
@@ -53,7 +54,15 @@ public class AuthorsLayout {
         Button deleteButton = new Button("Удалить");
         deleteButton.addStyleName(ValoTheme.BUTTON_DANGER);
         deleteButton.addClickListener(clickEvent -> {
-            controller.deleteAuthor(((Author) authorsGrid.getSelectedRow()).getId());
+            if (authorsGrid.getSelectedRow() != null)
+                try {
+                    controller.deleteAuthor(((Author) authorsGrid.getSelectedRow()).getId());
+                } catch (DeleteException e) {
+                    new Notification("Невозможно удалить автора", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+                }
+            else{
+                new Notification("Выберите автора", Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
+            }
         });
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();

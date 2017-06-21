@@ -20,7 +20,27 @@ public class MainUI extends UI {
         Controller controller = new Controller(this);
         booksLayout = new BooksLayout(controller);
         authorsLayout = new AuthorsLayout(controller);
-        setContent(authorsLayout.getLayout());
+        genresLayout = new GenresLayout(controller);
+        VerticalLayout components = new VerticalLayout();
+
+
+        components.addComponent(booksLayout.getLayout());
+
+        HorizontalLayout secondaryScreens = new HorizontalLayout();
+        secondaryScreens.setSizeFull();
+        secondaryScreens.setMargin(true);
+
+        Layout authors = authorsLayout.getLayout();
+        Layout genres = genresLayout.getLayout();
+
+        secondaryScreens.addComponent(authors);
+        secondaryScreens.addComponent(genres);
+
+
+        components.addComponent(secondaryScreens);
+        secondaryScreens.setComponentAlignment(authors, Alignment.MIDDLE_LEFT);
+        secondaryScreens.setComponentAlignment(genres, Alignment.MIDDLE_RIGHT);
+        setContent(components);
 
     }
 
