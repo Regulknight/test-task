@@ -26,12 +26,12 @@ public class AuthorService {
     }
 
     public void add(Author author) throws SQLException {
-        String query = "INSERT INTO TABLE PUBLIC.AUTHOR(FNAME, LNAME, PATRON) VALUES(?, ?, ?)";
+        String query = "INSERT INTO PUBLIC.AUTHOR(FNAME, LNAME, PATRON) VALUES(?, ?, ?)";
         statement = connection.prepareStatement(query);
         statement.setString(1, author.getFname());
         statement.setString(2, author.getLname());
         statement.setString(3, author.getPatronymic());
-        statement.executeQuery();
+        statement.execute();
     }
 
     public Author get(long id) throws SQLException {
@@ -54,7 +54,7 @@ public class AuthorService {
         String query = "DELETE FROM PUBLIC.AUTHOR WHERE ID = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1, String.valueOf(id));
-        statement.executeQuery();
+        statement.execute();
     }
 
     public void set(Author author) throws SQLException {
@@ -64,7 +64,7 @@ public class AuthorService {
         statement.setString(2, author.getLname());
         statement.setString(3, author.getPatronymic());
         statement.setString(4, String.valueOf(author.getId()));
-        statement.executeQuery();
+        statement.execute();
     }
 
     public List<Author> getAll() throws SQLException {

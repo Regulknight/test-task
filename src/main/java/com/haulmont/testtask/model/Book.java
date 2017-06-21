@@ -9,13 +9,13 @@ public class Book {
     Author author;
     Genre genre;
     String publisher;
-    Date year;
+    Integer year;
     String city;
 
     public Book() {
     }
 
-    public Book(Long id, String name, Author author, Genre genre, String publisher, Date year, String city) {
+    public Book(Long id, String name, Author author, Genre genre, String publisher, Integer year, String city) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -65,11 +65,11 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Date getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(Date year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 

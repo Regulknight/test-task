@@ -6,6 +6,7 @@ import com.haulmont.testtask.dao.GenreService;
 import com.haulmont.testtask.model.Author;
 import com.haulmont.testtask.model.Book;
 import com.haulmont.testtask.model.Genre;
+import com.haulmont.testtask.view.MainUI;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,11 +18,13 @@ public class Controller {
     private AuthorService authorService;
     private GenreService genreService;
     private BookService bookService;
+    private MainUI ui;
 
-    public Controller(){
-        authorService = AuthorService.getInstance();
-        genreService = GenreService.getInstance();
-        bookService = BookService.getInstance();
+    public Controller(MainUI ui){
+        this.authorService = AuthorService.getInstance();
+        this.genreService = GenreService.getInstance();
+        this.bookService = BookService.getInstance();
+        this.ui = ui;
 
     }
 
@@ -31,6 +34,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateBooksLayout();
     }
 
     public void setBook(Book book){
@@ -39,6 +43,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateBooksLayout();
     }
 
     public void deleteBook(long id){
@@ -47,6 +52,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateBooksLayout();
     }
 
     public List<Book> getAllBooks(){
@@ -64,6 +70,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateGenresLayout();
     }
 
     public void setGenre(Genre genre){
@@ -72,6 +79,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateGenresLayout();
     }
 
     public void deleteGenre(long id){
@@ -80,6 +88,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateGenresLayout();
     }
 
     public List<Genre> getAllGenres(){
@@ -97,6 +106,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateAuthorsLayout();
     }
 
     public void setAuthor(Author author){
@@ -105,6 +115,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateAuthorsLayout();
     }
 
     public void deleteAuthor(long id){
@@ -113,6 +124,7 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ui.updateAuthorsLayout();
     }
 
     public List<Author> getAllAuthors(){

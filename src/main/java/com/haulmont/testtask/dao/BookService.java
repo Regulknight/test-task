@@ -27,15 +27,15 @@ public class BookService {
     }
 
     public void add(Book book) throws SQLException {
-        String query = "INSERT INTO TABLE PUBLIC.BOOK(NAME, BYEAR, CITY, AUTHOR, GENRE, PUBLISHER) VALUES(?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO PUBLIC.BOOK(NAME, BYEAR, CITY, AUTHOR, GENRE, PUBLISHER) VALUES(?, ?, ?, ?, ?, ?)";
         statement = connection.prepareStatement(query);
         statement.setString(1, book.getName());
         statement.setString(2, String.valueOf(book.getYear()));
         statement.setString(3, book.getCity());
-        statement.setString(4, String.valueOf(book.getAuthor()));
-        statement.setString(5, String.valueOf(book.getGenre()));
+        statement.setString(4, String.valueOf(book.getAuthor().getId()));
+        statement.setString(5, String.valueOf(book.getGenre().getId()));
         statement.setString(6, book.getPublisher());
-        statement.executeQuery();
+        statement.execute();
     }
 
     public Book get(long id) throws SQLException {
@@ -47,7 +47,7 @@ public class BookService {
             Book book = new Book();
             book.setId(rs.getLong("ID"));
             book.setName(rs.getString("NAME"));
-            book.setYear(rs.getDate("BYEAR"));
+            book.setYear(rs.getInt("BYEAR"));
             book.setCity(rs.getString("CITY"));
             book.setAuthor(AuthorService.getInstance().get(rs.getLong("AUTHOR")));
             book.setGenre(GenreService.getInstance().get(rs.getLong("GENRE")));
@@ -58,24 +58,24 @@ public class BookService {
     }
 
     public void set(Book book) throws SQLException {
-        String query = "UPDATE PUBLIC.BOOK SET NAME = ?, BYEAR = ?, CITY = ?, AUTHOR = ?, GENRE = ?, PUBLISHER = ?) " +
+        String query = "UPDATE PUBLIC.BOOK SET NAME = ?, BYEAR = ?, CITY = ?, AUTHOR = ?, GENRE = ?, PUBLISHER = ? " +
                 "WHERE ID = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1, book.getName());
         statement.setString(2, String.valueOf(book.getYear()));
         statement.setString(3, book.getCity());
-        statement.setString(4, String.valueOf(book.getAuthor()));
-        statement.setString(5, String.valueOf(book.getGenre()));
+        statement.setString(4, String.valueOf(book.getAuthor().getId()));
+        statement.setString(5, String.valueOf(book.getGenre().getId()));
         statement.setString(6, book.getPublisher());
         statement.setString(7, String.valueOf(book.getId()));
-        statement.executeQuery();
+        statement.execute();
     }
 
     public void delete(long id) throws SQLException {
         String query = "DELETE FROM PUBLIC.BOOK WHERE ID = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1, String.valueOf(id));
-        statement.executeQuery();
+        statement.execute();
     }
 
     public List<Book> getAll() throws SQLException {
@@ -87,7 +87,7 @@ public class BookService {
             Book book = new Book();
             book.setId(rs.getLong("ID"));
             book.setName(rs.getString("NAME"));
-            book.setYear(rs.getDate("BYEAR"));
+            book.setYear(rs.getInt("BYEAR"));
             book.setCity(rs.getString("CITY"));
             book.setAuthor(AuthorService.getInstance().get(rs.getLong("AUTHOR")));
             book.setGenre(GenreService.getInstance().get(rs.getLong("GENRE")));

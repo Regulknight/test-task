@@ -23,10 +23,10 @@ public class GenreService {
     }
 
     public void add(Genre genre) throws SQLException {
-        String query = "INSERT INTO TABLE PUBLIC.GENRE(NAME) VALUES(?)";
+        String query = "INSERT INTO PUBLIC.GENRE(NAME) VALUES(?)";
         statement = connection.prepareStatement(query);
         statement.setString(1, genre.getName());
-        statement.executeQuery();
+        statement.execute();
     }
 
     public Genre get(long id) throws SQLException {
@@ -48,14 +48,14 @@ public class GenreService {
         statement = connection.prepareStatement(query);
         statement.setString(1, genre.getName());
         statement.setString(2, String.valueOf(genre.getName()));
-        statement.executeQuery();
+        statement.execute();
     }
 
     public void delete(long id) throws SQLException {
         String query = "DELETE FROM PUBLIC.GENRE WHERE ID = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1, String.valueOf(id));
-        statement.executeQuery();
+        statement.execute();
     }
 
     public List<Genre> getAll() throws SQLException {
