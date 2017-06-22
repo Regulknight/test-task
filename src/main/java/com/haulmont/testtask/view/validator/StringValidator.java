@@ -13,8 +13,6 @@ public class StringValidator extends AbstractStringValidator {
 
     @Override
     protected boolean isValidValue(String s) {
-        if (s == null)
-            return false;
         s.trim();
         if (s.matches("[a-zA-Z-а-яА-ЯёЁ]+"))
             return true;

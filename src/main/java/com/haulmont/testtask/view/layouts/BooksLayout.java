@@ -18,6 +18,9 @@ import com.vaadin.ui.themes.ValoTheme;
 public class BooksLayout {
     private final Controller controller;
     private Grid booksGrid;
+    TextField nameFilter;
+    TextField authorFilter;
+    TextField publisherFilter;
 
     public BooksLayout(Controller controller) {
         this.controller = controller;
@@ -40,32 +43,11 @@ public class BooksLayout {
         filters.setSpacing(true);
 
 
-        TextField nameFilter = new TextField("Название");
-        TextField authorFilter = new TextField("Автор");
-        TextField publisherFilter = new TextField("Издатель");
+        nameFilter = new TextField("Название");
+        authorFilter = new TextField("Автор");
+        publisherFilter = new TextField("Издатель");
 
-
-        nameFilter.addTextChangeListener(textChangeEvent -> {
-            container.removeContainerFilters("name");
-            if (!textChangeEvent.getText().isEmpty())
-                container.addContainerFilter(new SimpleStringFilter("name", textChangeEvent.getText(),
-                    true, false));
-        });
-
-        authorFilter.addTextChangeListener(textChangeEvent -> {
-            container.removeContainerFilters("author");
-            if (!textChangeEvent.getText().isEmpty())
-                container.addContainerFilter(new SimpleStringFilter("author", textChangeEvent.getText(),
-                        true, false));
-
-        });
-
-        publisherFilter.addTextChangeListener(textChangeEvent -> {
-            container.removeContainerFilters("publisher");
-            if (!textChangeEvent.getText().isEmpty())
-                container.addContainerFilter(new SimpleStringFilter("publisher", textChangeEvent.getText(),
-                        true, false));
-        });
+        addFilters(container);
 
         filters.addComponent(nameFilter);
         filters.addComponent(authorFilter);
@@ -102,7 +84,7 @@ public class BooksLayout {
         deleteButton.addClickListener(clickEvent -> {
             if (booksGrid.getSelectedRow() != null)
                 try {
-                    controller.deleteBook(((Book) booksGrid.getSelectedRow()).getId());
+                    controller.deleteBook((Book) booksGrid.getSelectedRow());
                 } catch (DeleteException e) {
                     new Notification("Невозможно удалить книгу", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
                 }
@@ -125,7 +107,33 @@ public class BooksLayout {
         return layout;
     }
 
-    public void updateGrid(){
-        booksGrid.setContainerDataSource(new BeanItemContainer<>(Book.class, controller.getAllBooks()));
+    public void updateLayout(){
+        BeanItemContainer<Book> container = new BeanItemContainer<Book>(Book.class, controller.getAllBooks());
+        booksGrid.setContainerDataSource(container);
+        addFilters(container);
+    }
+
+    private void addFilters(BeanItemContainer<Book> container){
+        nameFilter.addTextChangeListener(textChangeEvent -> {
+            container.removeContainerFilters("name");
+            if (!textChangeEvent.getText().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("name", textChangeEvent.getText(),
+                        true, false));
+        });
+
+        authorFilter.addTextChangeListener(textChangeEvent -> {
+            container.removeContainerFilters("author");
+            if (!textChangeEvent.getText().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("author", textChangeEvent.getText(),
+                        true, false));
+
+        });
+
+        publisherFilter.addTextChangeListener(textChangeEvent -> {
+            container.removeContainerFilters("publisher");
+            if (!textChangeEvent.getText().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("publisher", textChangeEvent.getText(),
+                        true, false));
+        });
     }
 }

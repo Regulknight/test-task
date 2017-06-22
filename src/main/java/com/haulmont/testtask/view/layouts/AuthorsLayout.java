@@ -56,7 +56,7 @@ public class AuthorsLayout {
         deleteButton.addClickListener(clickEvent -> {
             if (authorsGrid.getSelectedRow() != null)
                 try {
-                    controller.deleteAuthor(((Author) authorsGrid.getSelectedRow()).getId());
+                    controller.deleteAuthor((Author) authorsGrid.getSelectedRow());
                 } catch (DeleteException e) {
                     new Notification("Невозможно удалить автора", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
                 }

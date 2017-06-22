@@ -4,6 +4,7 @@ import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.model.Author;
 import com.haulmont.testtask.model.Genre;
 import com.haulmont.testtask.view.validator.StringValidator;
+import com.vaadin.data.Validator;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -40,9 +41,9 @@ public class SubGenreUI extends Window {
     private void init(){
         layout.setMargin(true);
         name = new TextField("Название");
-
+        name.setRequired(true);
         name.addValidator(new StringValidator("Название жанра должно содержать только буквы"));
-
+        name.setValidationVisible(false);
         HorizontalLayout buttons = new HorizontalLayout();
         buttons.setMargin(true);
         buttons.setSpacing(true);
@@ -69,23 +70,36 @@ public class SubGenreUI extends Window {
     private void initAdd(){
         save.addClickListener(clickEvent -> {
             Genre genre = new Genre();
-
-            name.validate();
-
-            genre.setName(name.getValue());
-            controller.addGenre(genre);
-            close();
+            if (fieldsValidation()) {
+                controller.addGenre(genre);
+                close();
+            }
         });
     }
 
     private void initEdit(){
         name.setValue(genre.getName());
         save.addClickListener(clickEvent -> {
+            if (fieldsValidation()){
+                controller.setGenre(genre);
+                close();
+            }
+        });
+    }
+
+    private boolean fieldsValidation(){
+        boolean validation = true;
+
+        name.setValidationVisible(false);
+        try {
             name.validate();
             genre.setName(name.getValue());
-            controller.addGenre(genre);
-            close();
-        });
+        }catch (Validator.InvalidValueException e){
+            name.setValidationVisible(true);
+            validation = false;
+        }
+
+        return validation;
     }
 
 }

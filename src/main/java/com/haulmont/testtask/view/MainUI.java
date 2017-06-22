@@ -1,6 +1,7 @@
 package com.haulmont.testtask.view;
 
 import com.haulmont.testtask.controller.Controller;
+import com.haulmont.testtask.model.Book;
 import com.haulmont.testtask.view.layouts.AuthorsLayout;
 import com.haulmont.testtask.view.layouts.BooksLayout;
 import com.haulmont.testtask.view.layouts.GenresLayout;
@@ -45,7 +46,7 @@ public class MainUI extends UI {
     }
 
     public void updateBooksLayout(){
-        booksLayout.updateGrid();
+        booksLayout.updateLayout();
     }
 
     public void updateAuthorsLayout(){

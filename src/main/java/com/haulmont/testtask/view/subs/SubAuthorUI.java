@@ -6,6 +6,7 @@ import com.haulmont.testtask.model.Book;
 import com.haulmont.testtask.view.validator.PatronValidator;
 import com.haulmont.testtask.view.validator.StringValidator;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.Validator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
@@ -49,9 +50,16 @@ public class SubAuthorUI extends Window {
         lname = new TextField("Фамилия");
         patron = new TextField("Отчество");
 
+        fname.setRequired(true);
+        lname.setRequired(true);
+
         fname.addValidator(new StringValidator("Имя должно содержать только буквы"));
         lname.addValidator(new StringValidator("Фамилия должна содержать только буквы"));
         patron.addValidator(new PatronValidator("Отчество должно содержать только буквы"));
+
+        fname.setValidationVisible(false);
+        lname.setValidationVisible(false);
+        patron.setValidationVisible(false);
 
         HorizontalLayout buttons = new HorizontalLayout();
         buttons.setMargin(true);
@@ -81,36 +89,60 @@ public class SubAuthorUI extends Window {
     }
 
     private void initAdd(){
-        save.addClickListener(clickEvent -> {
-            fname.validate();
-            lname.validate();
-            patron.validate();
+        this.author = new Author();
 
-            Author author = new Author();
-            author.setFname(fname.getValue());
-            author.setLname(lname.getValue());
-            author.setPatronymic(patron.getValue());
-            controller.addAuthor(author);
-            close();
+        save.addClickListener(clickEvent -> {
+            if (fieldsValidation()) {
+                controller.addAuthor(author);
+                close();
+            }
         });
     }
 
     private void initEdit(){
-        fname.validate();
-        lname.validate();
-        patron.validate();
-
         fname.setValue(author.getFname());
         lname.setValue(author.getLname());
         patron.setValue(author.getPatronymic());
 
         save.addClickListener(clickEvent -> {
-            author.setFname(fname.getValue());
-            author.setLname(lname.getValue());
-            author.setPatronymic(patron.getValue());
-            controller.setAuthor(author);
-            close();
+            if (fieldsValidation()) {
+                controller.setAuthor(author);
+                close();
+            }
         });
+    }
+
+    private boolean fieldsValidation(){
+        boolean validation = true;
+
+        fname.setValidationVisible(false);
+        try {
+            fname.validate();
+            author.setFname(fname.getValue());
+        }catch (Validator.InvalidValueException e){
+            fname.setValidationVisible(true);
+            validation = false;
+        }
+
+        lname.setValidationVisible(false);
+        try{
+            lname.validate();
+            author.setLname(lname.getValue());
+        }catch (Validator.InvalidValueException e){
+            lname.setValidationVisible(true);
+            validation = false;
+        }
+
+        patron.setValidationVisible(false);
+        try {
+            patron.validate();
+            author.setPatronymic(patron.getValue());
+        }catch (Validator.InvalidValueException e){
+            patron.setValidationVisible(true);
+            validation = false;
+        }
+
+        return validation;
     }
 
 }

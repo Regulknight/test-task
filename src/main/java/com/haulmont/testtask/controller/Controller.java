@@ -7,8 +7,10 @@ import com.haulmont.testtask.model.Author;
 import com.haulmont.testtask.model.Book;
 import com.haulmont.testtask.model.Genre;
 import com.haulmont.testtask.view.MainUI;
+import com.vaadin.ui.Grid;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,9 +48,9 @@ public class Controller {
         ui.updateBooksLayout();
     }
 
-    public void deleteBook(long id) throws DeleteException {
+    public void deleteBook(Book book) throws DeleteException {
         try {
-            bookService.delete(id);
+            bookService.delete(book.getId());
         } catch (SQLException e) {
             throw new DeleteException();
         }
@@ -82,9 +84,18 @@ public class Controller {
         ui.updateGenresLayout();
     }
 
-    public void deleteGenre(long id) throws DeleteException {
+    public Genre getGenre(long id){
+        Genre genre = new Genre();
         try {
-            genreService.delete(id);
+            genre = genreService.get(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return genre;
+    }
+    public void deleteGenre(Genre genre) throws DeleteException {
+        try {
+            genreService.delete(genre.getId());
         } catch (SQLException e) {
             throw new DeleteException();
         }
@@ -118,9 +129,9 @@ public class Controller {
         ui.updateAuthorsLayout();
     }
 
-    public void deleteAuthor(long id) throws DeleteException {
+    public void deleteAuthor(Author author) throws DeleteException {
         try {
-            authorService.delete(id);
+            authorService.delete(author.getId());
         } catch (SQLException e) {
             throw new DeleteException();
         }
@@ -134,6 +145,22 @@ public class Controller {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Object[]> getGenresStats(){
+        List<Object[]> result = new ArrayList<Object[]>();
+        try {
+            for (Genre genre: genreService.getAll()){
+                int stat = 0;
+                for (Book book: bookService.getAll())
+                    if (book.getGenre().equals(genre))
+                        stat++;
+                result.add(new Object[]{genre.getId(), stat});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

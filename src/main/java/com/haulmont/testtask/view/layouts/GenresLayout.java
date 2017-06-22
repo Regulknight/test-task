@@ -5,6 +5,7 @@ import com.haulmont.testtask.controller.DeleteException;
 import com.haulmont.testtask.model.Author;
 import com.haulmont.testtask.model.Genre;
 import com.haulmont.testtask.view.MainUI;
+import com.haulmont.testtask.view.subs.StatUI;
 import com.haulmont.testtask.view.subs.SubAuthorUI;
 import com.haulmont.testtask.view.subs.SubGenreUI;
 import com.vaadin.data.util.BeanItemContainer;
@@ -57,7 +58,7 @@ public class GenresLayout {
         deleteButton.addClickListener(clickEvent -> {
             if (genresGrid.getSelectedRow() != null)
                 try {
-                    controller.deleteGenre(((Genre) genresGrid.getSelectedRow()).getId());
+                    controller.deleteGenre((Genre) genresGrid.getSelectedRow());
                 } catch (DeleteException e) {
                     new Notification("Невозможно удалить жанр", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
                 }
@@ -67,12 +68,16 @@ public class GenresLayout {
         });
 
         Button statButton = new Button("Показать статистику");
-
+        statButton.addClickListener(clickEvent -> {
+            StatUI statUI = new StatUI(controller);
+            MainUI.getCurrent().addWindow(statUI);
+        });
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
         horizontalLayout.addComponent(addButton);
         horizontalLayout.addComponent(editButton);
+        horizontalLayout.addComponent(statButton);
         horizontalLayout.addComponent(deleteButton);
         horizontalLayout.setSpacing(true);
         horizontalLayout.setMargin(true);
