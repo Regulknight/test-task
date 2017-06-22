@@ -21,6 +21,7 @@ public class BooksLayout {
     TextField nameFilter;
     TextField authorFilter;
     TextField publisherFilter;
+    Button applyFilters;
 
     public BooksLayout(Controller controller) {
         this.controller = controller;
@@ -41,17 +42,22 @@ public class BooksLayout {
         HorizontalLayout filters = new HorizontalLayout();
         filters.setMargin(true);
         filters.setSpacing(true);
-
+        filters.setSizeFull();
 
         nameFilter = new TextField("Название");
         authorFilter = new TextField("Автор");
         publisherFilter = new TextField("Издатель");
+        applyFilters = new Button("Применить");
+        applyFilters.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 
         addFilters(container);
 
         filters.addComponent(nameFilter);
         filters.addComponent(authorFilter);
         filters.addComponent(publisherFilter);
+        filters.addComponent(applyFilters);
+
+        filters.setComponentAlignment(applyFilters, Alignment.BOTTOM_RIGHT);
 
         Panel panel = new Panel("Фильтр");
         filters.setSizeUndefined();
@@ -114,26 +120,21 @@ public class BooksLayout {
     }
 
     private void addFilters(BeanItemContainer<Book> container){
-        nameFilter.addTextChangeListener(textChangeEvent -> {
+        applyFilters.addClickListener(clickEvent -> {
             container.removeContainerFilters("name");
-            if (!textChangeEvent.getText().isEmpty())
-                container.addContainerFilter(new SimpleStringFilter("name", textChangeEvent.getText(),
+            if (!nameFilter.getValue().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("name", nameFilter.getValue(),
                         true, false));
-        });
-
-        authorFilter.addTextChangeListener(textChangeEvent -> {
             container.removeContainerFilters("author");
-            if (!textChangeEvent.getText().isEmpty())
-                container.addContainerFilter(new SimpleStringFilter("author", textChangeEvent.getText(),
+            if (!nameFilter.getValue().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("author", authorFilter.getValue(),
                         true, false));
-
-        });
-
-        publisherFilter.addTextChangeListener(textChangeEvent -> {
             container.removeContainerFilters("publisher");
-            if (!textChangeEvent.getText().isEmpty())
-                container.addContainerFilter(new SimpleStringFilter("publisher", textChangeEvent.getText(),
+            if (!nameFilter.getValue().isEmpty())
+                container.addContainerFilter(new SimpleStringFilter("publisher", publisherFilter.getValue(),
                         true, false));
         });
+
+
     }
 }
