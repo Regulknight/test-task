@@ -4,10 +4,7 @@ import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.model.Author;
 import com.haulmont.testtask.model.Book;
 import com.haulmont.testtask.model.Genre;
-import com.haulmont.testtask.view.validator.AuthorValidator;
-import com.haulmont.testtask.view.validator.GenreValidator;
-import com.haulmont.testtask.view.validator.StringValidator;
-import com.haulmont.testtask.view.validator.YearValidator;
+import com.haulmont.testtask.view.validator.*;
 import com.vaadin.data.Container;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItemContainer;
@@ -64,7 +61,7 @@ public class SubBookUI extends Window {
         publisher.addItem("Питер");
         publisher.addItem("O'Really");
 
-        name.addValidator(new StringValidator("Название книги должно содержать только буквы и" +
+        name.addValidator(new BookNameValidator("Название книги может содержать буквы и цифры, но" +
                 " не может быть пустым"));
         year.addValidator(new YearValidator("Год должен состоять только из цифр и" +
                 " не может быть пустым"));

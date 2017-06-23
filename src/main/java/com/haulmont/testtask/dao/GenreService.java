@@ -47,7 +47,7 @@ public class GenreService {
         String query = "UPDATE PUBLIC.GENRE SET NAME = ? WHERE ID = ?";
         statement = connection.prepareStatement(query);
         statement.setString(1, genre.getName());
-        statement.setString(2, String.valueOf(genre.getName()));
+        statement.setString(2, String.valueOf(genre.getId()));
         statement.execute();
     }
 
