@@ -129,6 +129,16 @@ public class Controller {
         ui.updateAuthorsLayout();
     }
 
+    public Author getAuthor(long id){
+        Author author = new Author();
+        try {
+            author = authorService.get(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return author;
+    }
+
     public void deleteAuthor(Author author) throws DeleteException {
         try {
             authorService.delete(author.getId());
@@ -162,6 +172,7 @@ public class Controller {
         }
         return result;
     }
+
 
 }
 

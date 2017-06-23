@@ -41,8 +41,9 @@ public class SubGenreUI extends Window {
     private void init(){
         layout.setMargin(true);
         name = new TextField("Название");
-        name.setRequired(true);
-        name.addValidator(new StringValidator("Название жанра должно содержать только буквы"));
+
+        name.addValidator(new StringValidator("Название жанра должно содержать только буквы" +
+                " и не может быть пустым"));
         name.setValidationVisible(false);
         HorizontalLayout buttons = new HorizontalLayout();
         buttons.setMargin(true);
@@ -69,7 +70,7 @@ public class SubGenreUI extends Window {
 
     private void initAdd(){
         save.addClickListener(clickEvent -> {
-            Genre genre = new Genre();
+            this.genre = new Genre();
             if (fieldsValidation()) {
                 controller.addGenre(genre);
                 close();

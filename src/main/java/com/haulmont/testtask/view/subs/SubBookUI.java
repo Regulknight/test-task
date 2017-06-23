@@ -40,9 +40,9 @@ public class SubBookUI extends Window {
         center();
 
         init();
-        if (book == null){
+        if (book == null) {
             initAdd();
-        }else {
+        } else {
             initEdit();
         }
         setContent(layout);
@@ -60,9 +60,12 @@ public class SubBookUI extends Window {
         publisher.addItem("Питер");
         publisher.addItem("O'Really");
 
-        name.addValidator(new StringValidator("Название книги должно содержать только буквы"));
-        year.addValidator(new YearValidator("Год должен состоять только из цифр"));
-        city.addValidator(new StringValidator("Название города должно состоять только из букв"));
+        name.addValidator(new StringValidator("Название книги должно содержать только буквы и" +
+                " не может быть пустым"));
+        year.addValidator(new YearValidator("Год должен состоять только из цифр и" +
+                " не может быть пустым"));
+        city.addValidator(new StringValidator("Название города должно состоять только из букв и" +
+                " не может быть пустым"));
         author.addValidator(new NullValidator("Необходимо выбрать автора", false));
         genre.addValidator(new NullValidator("Необходимо выбрать жанр", false));
         publisher.addValidator(new NullValidator("Необходимо выбрать издателя", false));
@@ -78,12 +81,6 @@ public class SubBookUI extends Window {
         genre.setNullSelectionAllowed(false);
         publisher.setNullSelectionAllowed(false);
 
-        name.setRequired(true);
-        year.setRequired(true);
-        city.setRequired(true);
-        author.setRequired(true);
-        genre.setRequired(true);
-        publisher.setRequired(true);
 
         HorizontalLayout buttons = new HorizontalLayout();
         buttons.setMargin(true);
@@ -118,7 +115,7 @@ public class SubBookUI extends Window {
         layout.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
     }
 
-    private void initAdd(){
+    private void initAdd() {
 
         save.addClickListener(clickEvent -> {
             this.book = new Book();
@@ -131,7 +128,7 @@ public class SubBookUI extends Window {
         });
     }
 
-    private void initEdit(){
+    private void initEdit() {
         name.setValue(book.getName());
         year.setValue(String.valueOf(book.getYear()));
         city.setValue(book.getCity());
@@ -140,21 +137,21 @@ public class SubBookUI extends Window {
         publisher.setValue(book.getPublisher());
 
         save.addClickListener(clickEvent -> {
-            if (fieldsValidation()){
+            if (fieldsValidation()) {
                 controller.setBook(book);
                 close();
             }
         });
     }
 
-    private boolean fieldsValidation(){
+    private boolean fieldsValidation() {
         boolean validation = true;
 
         name.setValidationVisible(false);
         try {
             name.validate();
             book.setName(name.getValue());
-        }catch (Validator.InvalidValueException e){
+        } catch (Validator.InvalidValueException e) {
             validation = false;
             name.setValidationVisible(true);
         }
@@ -163,48 +160,60 @@ public class SubBookUI extends Window {
         try {
             year.validate();
             book.setYear(Integer.valueOf(year.getValue()));
-        }catch (Validator.InvalidValueException e){;
+        } catch (Validator.InvalidValueException e) {
+            ;
             validation = false;
             year.setValidationVisible(true);
         }
 
         city.setValidationVisible(false);
-        try{
+        try {
             city.validate();
             book.setCity(city.getValue());
-        }catch (Validator.InvalidValueException e){
+        } catch (Validator.InvalidValueException e) {
             validation = false;
             city.setValidationVisible(true);
         }
 
         author.setValidationVisible(false);
-        try{
+        try {
             author.validate();
-            book.setAuthor((Author) author.getValue());
-        }catch (Validator.InvalidValueException e){
+            if (controller.getAuthor(((Author) author.getValue()).getId()) == null) {
+                validation = false;
+                close();
+                new Notification("Автор был удалён", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+            } else {
+                book.setAuthor((Author) author.getValue());
+            }
+        } catch (Validator.InvalidValueException e) {
             validation = false;
             author.setValidationVisible(true);
         }
 
         genre.setValidationVisible(false);
-        try{
+        try {
             genre.validate();
-            book.setGenre((Genre) genre.getValue());
-        }catch (Validator.InvalidValueException e){
+            if (controller.getGenre(((Genre) genre.getValue()).getId()) == null) {
+                close();
+                validation = false;
+                new Notification("Жанр был удалён", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+            } else
+                book.setGenre((Genre) genre.getValue());
+        } catch (Validator.InvalidValueException e) {
             validation = false;
             genre.setValidationVisible(true);
         }
 
         publisher.setValidationVisible(false);
-        try{
+        try {
             publisher.validate();
             book.setPublisher((String) publisher.getValue());
-        }catch (Validator.InvalidValueException e){
+        } catch (Validator.InvalidValueException e) {
             validation = false;
             publisher.setValidationVisible(true);
         }
-
         return validation;
     }
 
 }
+

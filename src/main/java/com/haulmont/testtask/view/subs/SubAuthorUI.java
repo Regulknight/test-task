@@ -50,11 +50,10 @@ public class SubAuthorUI extends Window {
         lname = new TextField("Фамилия");
         patron = new TextField("Отчество");
 
-        fname.setRequired(true);
-        lname.setRequired(true);
-
-        fname.addValidator(new StringValidator("Имя должно содержать только буквы"));
-        lname.addValidator(new StringValidator("Фамилия должна содержать только буквы"));
+        fname.addValidator(new StringValidator("Имя должно содержать только буквы и" +
+                " не может быть пустым"));
+        lname.addValidator(new StringValidator("Фамилия должна содержать только буквы и" +
+                "не может быть пустым"));
         patron.addValidator(new PatronValidator("Отчество должно содержать только буквы"));
 
         fname.setValidationVisible(false);
