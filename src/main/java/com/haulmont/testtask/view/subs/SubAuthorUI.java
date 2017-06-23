@@ -71,6 +71,7 @@ public class SubAuthorUI extends Window {
         cancel.addStyleName(ValoTheme.BUTTON_DANGER);
         cancel.addClickListener(clickEvent -> {
             close();
+            controller.updateUI();
         });
 
         buttons.addComponent(save);
@@ -94,6 +95,7 @@ public class SubAuthorUI extends Window {
             if (fieldsValidation()) {
                 controller.addAuthor(author);
                 close();
+                controller.updateUI();
             }
         });
     }
@@ -107,6 +109,7 @@ public class SubAuthorUI extends Window {
             if (fieldsValidation()) {
                 controller.setAuthor(author);
                 close();
+                controller.updateUI();
             }
         });
     }

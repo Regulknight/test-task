@@ -173,6 +173,11 @@ public class Controller {
         return result;
     }
 
+    public void updateUI(){
+        ui.updateAuthorsLayout();
+        ui.updateGenresLayout();
+        ui.updateBooksLayout();
+    }
 
 }
 

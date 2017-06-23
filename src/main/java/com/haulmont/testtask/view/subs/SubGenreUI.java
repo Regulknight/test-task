@@ -56,6 +56,7 @@ public class SubGenreUI extends Window {
         cancel.addStyleName(ValoTheme.BUTTON_DANGER);
         cancel.addClickListener(clickEvent -> {
             close();
+            controller.updateUI();
         });
 
         buttons.addComponent(save);
@@ -74,6 +75,7 @@ public class SubGenreUI extends Window {
             if (fieldsValidation()) {
                 controller.addGenre(genre);
                 close();
+                controller.updateUI();
             }
         });
     }
@@ -84,6 +86,7 @@ public class SubGenreUI extends Window {
             if (fieldsValidation()){
                 controller.setGenre(genre);
                 close();
+                controller.updateUI();
             }
         });
     }

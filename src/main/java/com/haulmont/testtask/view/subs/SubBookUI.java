@@ -4,9 +4,13 @@ import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.model.Author;
 import com.haulmont.testtask.model.Book;
 import com.haulmont.testtask.model.Genre;
+import com.haulmont.testtask.view.validator.AuthorValidator;
+import com.haulmont.testtask.view.validator.GenreValidator;
 import com.haulmont.testtask.view.validator.StringValidator;
 import com.haulmont.testtask.view.validator.YearValidator;
+import com.vaadin.data.Container;
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.validator.NullValidator;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
@@ -66,8 +70,8 @@ public class SubBookUI extends Window {
                 " не может быть пустым"));
         city.addValidator(new StringValidator("Название города должно состоять только из букв и" +
                 " не может быть пустым"));
-        author.addValidator(new NullValidator("Необходимо выбрать автора", false));
-        genre.addValidator(new NullValidator("Необходимо выбрать жанр", false));
+        author.addValidator(new AuthorValidator("Необходимо выбрать автора", controller));
+        genre.addValidator(new GenreValidator("Необходимо выбрать жанр", controller));
         publisher.addValidator(new NullValidator("Необходимо выбрать издателя", false));
 
         name.setValidationVisible(false);
@@ -93,6 +97,7 @@ public class SubBookUI extends Window {
         cancel.addStyleName(ValoTheme.BUTTON_DANGER);
         cancel.addClickListener(clickEvent -> {
             close();
+            controller.updateUI();
         });
 
         buttons.addComponent(save);
@@ -123,6 +128,7 @@ public class SubBookUI extends Window {
             if (fieldsValidation()) {
                 controller.addBook(book);
                 close();
+                controller.updateUI();
             }
 
         });
@@ -140,6 +146,7 @@ public class SubBookUI extends Window {
             if (fieldsValidation()) {
                 controller.setBook(book);
                 close();
+                controller.updateUI();
             }
         });
     }
@@ -161,7 +168,6 @@ public class SubBookUI extends Window {
             year.validate();
             book.setYear(Integer.valueOf(year.getValue()));
         } catch (Validator.InvalidValueException e) {
-            ;
             validation = false;
             year.setValidationVisible(true);
         }
@@ -178,14 +184,9 @@ public class SubBookUI extends Window {
         author.setValidationVisible(false);
         try {
             author.validate();
-            if (controller.getAuthor(((Author) author.getValue()).getId()) == null) {
-                validation = false;
-                close();
-                new Notification("Автор был удалён", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-            } else {
-                book.setAuthor((Author) author.getValue());
-            }
+            book.setAuthor((Author) author.getValue());
         } catch (Validator.InvalidValueException e) {
+            author.setContainerDataSource(new BeanItemContainer<>(Author.class, controller.getAllAuthors()));
             validation = false;
             author.setValidationVisible(true);
         }
@@ -193,13 +194,9 @@ public class SubBookUI extends Window {
         genre.setValidationVisible(false);
         try {
             genre.validate();
-            if (controller.getGenre(((Genre) genre.getValue()).getId()) == null) {
-                close();
-                validation = false;
-                new Notification("Жанр был удалён", Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
-            } else
-                book.setGenre((Genre) genre.getValue());
+            book.setGenre((Genre) genre.getValue());
         } catch (Validator.InvalidValueException e) {
+            genre.setContainerDataSource(new BeanItemContainer<>(Genre.class, controller.getAllGenres()));
             validation = false;
             genre.setValidationVisible(true);
         }
